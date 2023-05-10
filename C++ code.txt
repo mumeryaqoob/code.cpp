@@ -1,0 +1,89 @@
+#include <iostream>
+using namespace std;
+
+const int ROWS = 3;
+const int COLS = 3;
+
+// Function to display the Tic Tac Toe board
+void display_board(char board[][COLS]) {
+    for (int i = 0; i < ROWS; i++) {
+        for (int j = 0; j < COLS; j++) {
+            cout << board[i][j] << " ";
+        }
+        cout << endl;
+    }
+}
+
+// Function to check if the move is valid
+bool is_valid_move(char board[][COLS], int row, int col) {
+    if (row < 0 || row >= ROWS || col < 0 || col >= COLS) {
+        return false;
+    }
+    if (board[row][col] != ' ') {
+        return false;
+    }
+    return true;
+}
+
+// Function to check if the game is over
+bool is_game_over(char board[][COLS], char& winner) {
+    // Check rows
+    for (int i = 0; i < ROWS; i++) {
+        if (board[i][0] != ' ' && board[i][0] == board[i][1] && board[i][1] == board[i][2]) {
+            winner = board[i][0];
+            return true;
+        }
+    }
+    // Check columns
+    for (int j = 0; j < COLS; j++) {
+        if (board[0][j] != ' ' && board[0][j] == board[1][j] && board[1][j] == board[2][j]) {
+            winner = board[0][j];
+            return true;
+        }
+    }
+    // Check diagonals
+    if (board[0][0] != ' ' && board[0][0] == board[1][1] && board[1][1] == board[2][2]) {
+        winner = board[0][0];
+        return true;
+    }
+    if (board[0][2] != ' ' && board[0][2] == board[1][1] && board[1][1] == board[2][0]) {
+        winner = board[0][2];
+        return true;
+    }
+    // Check for a tie
+    for (int i = 0; i < ROWS; i++) {
+        for (int j = 0; j < COLS; j++) {
+            if (board[i][j] == ' ') {
+                return false;
+            }
+        }
+    }
+    winner = 'T';
+    return true;
+}
+
+// Function to get a valid move from the player
+void get_player_move(char board[][COLS], int& row, int& col) {
+    do {
+        cout << "Enter row (1-3) and column (1-3) separated by a space: ";
+        cin >> row >> col;
+        row--;
+        col--;
+    } while (!is_valid_move(board, row, col));
+}
+
+// Function to get a random move for the computer
+void get_computer_move(char board[][COLS], int& row, int& col) {
+    do {
+        row = rand() % ROWS;
+        col = rand() % COLS;
+    } while (!is_valid_move(board, row, col));
+}
+
+// Function to play the Tic Tac Toe game
+void play_game() {
+    char board[ROWS][COLS];
+    char current_player = 'X';
+    char winner = ' ';
+    int row, col;
+
